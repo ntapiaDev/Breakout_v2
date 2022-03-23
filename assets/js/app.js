@@ -17,6 +17,8 @@ const nbLine = 15
 
 const blockHeight = gameHeight / 2 / nbLine - margin
 
+const controllerSize = gameWidth / 5 // Valeur fixe (ex: 100) ?
+
 // Génération des blocs
 let xPos = margin
 let yPos = margin
@@ -46,3 +48,20 @@ for (let i = 0; i < blockPerLine * nbLine; i++) {
 // Ball
 
 // Controller
+
+const controller = document.createElement("div")
+controller.classList.add("controller")
+controller.style.width = controllerSize + "px"
+controller.style.height = blockHeight + "px"
+controller.style.left = gameWidth / 2 - controllerSize / 2 + "px" // Valeur qui sera modifiée
+controller.style.bottom = margin + "px"
+game.appendChild(controller)
+
+document.addEventListener("mousemove", function(e) { // 2 - 3 = game border modifier
+    if (e.clientX > game.getBoundingClientRect().x + controllerSize / 2 + 2 && game.getBoundingClientRect().x + gameWidth - controllerSize / 2 + margin > e.clientX) {
+        // if (controller.style.left.split("px")[0] > 3) {
+            controller.style.left = e.clientX - game.getBoundingClientRect().x - 3 - controllerSize / 2 + "px"
+        // } else {
+        // }
+    }
+})

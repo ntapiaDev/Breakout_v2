@@ -14,3 +14,13 @@ body {
     position: absolute;
     background-color: #AAA;
 }
+
+.ball {
+
+}
+
+.controller {
+    position: absolute;
+    border-radius: 10px;
+    background-color: #666;
+}

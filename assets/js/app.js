@@ -23,6 +23,7 @@ const speed = 5
 // Génération des blocs
 let xPos = margin
 let yPos = margin
+let allBlockPosition = []
 function newBlock() {
     let block = document.createElement("div")
     block.classList.add("block")
@@ -32,6 +33,8 @@ function newBlock() {
     // Placement des blocs
     block.style.left = xPos + "px"
     block.style.top = yPos + "px"
+    let blockPosition = []
+    blockPosition.push(xPos, yPos)
     game.appendChild(block)
 
     if (xPos < gameWidth - 2 * blockWidth) {
@@ -40,6 +43,7 @@ function newBlock() {
         yPos += blockHeight + margin
         xPos = margin
     }
+    allBlockPosition.push(blockPosition)
 }
 
 for (let i = 0; i < blockPerLine * nbLine; i++) {
@@ -68,10 +72,12 @@ function moveBall() {
     ball.style.top = ballPosition[1] + "px"
     borderCollide()
     controllerCollide()
+    blockCollide()
 }
 
 let gameStart = setInterval(moveBall, 10)
 
+let direction = "up"// Bugfix balle qui roule sur le controller
 // Collisions avec le cadre
 function borderCollide() {
     if (ballPosition[0] + 34 > gameWidth || ballPosition[0] + 3 < 0) {
@@ -79,6 +85,7 @@ function borderCollide() {
     }
     if (ballPosition[1] < 0) {
         ySpeed = -ySpeed
+        direction = "down"
     }
     if (ballPosition[1] + 34 > gameHeight) {
         clearInterval(gameStart)
@@ -87,10 +94,31 @@ function borderCollide() {
 
 // Collisions avec le controller
 function controllerCollide() {
-    if (ballPosition[0] + 32 > controllerPosition[0] && ballPosition[0] < controllerPosition[1] && // léger bug par ici de balle qui roule sur la planche :/
+    if (ballPosition[0] + 32 > controllerPosition[0] && ballPosition[0] < controllerPosition[1] &&
         ballPosition[1] > gameHeight - blockHeight * 2 - blockHeight / 2 - margin * 2) {
-        ySpeed = -ySpeed
-        console(ySpeed)
+        if (direction === "down") {
+            ySpeed = -ySpeed
+            direction = "up"
+        }
+        if (ballPosition[0] - controllerPosition[0] < 0 && xSpeed > 0 || ballPosition[0] - controllerPosition[0] > 60 && xSpeed < 0) {
+            xSpeed = -xSpeed
+        }
+    }
+}
+
+// Collisions avec les blocs
+let blocks = document.querySelectorAll(".block")
+function blockCollide() {
+    for (let i = 0; i < blocks.length; i++ ) {
+        if (ballPosition[0] + 32 > allBlockPosition[i][0] && ballPosition[0] < allBlockPosition[i][0] + blockWidth &&
+            ballPosition[1] + 32 > allBlockPosition[i][1] && ballPosition[1] < allBlockPosition[i][1] + blockHeight &&
+            blocks[i].style.display !== "none") {
+            blocks[i].style.display = "none"
+            if (direction === "up") { // A garder??
+                ySpeed = -ySpeed
+                direction ="down"
+            }
+        }
     }
 }
 

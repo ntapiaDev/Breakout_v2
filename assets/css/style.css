@@ -1,0 +1,16 @@
+body {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.breakout {
+    position: relative;
+    border: 3px double #666;
+}
+
+.block {
+    position: absolute;
+    background-color: #AAA;
+}

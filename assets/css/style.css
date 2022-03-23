@@ -16,11 +16,24 @@ body {
 }
 
 .ball {
-
+    position: absolute;
+    width: 32px;
+    height: 32px;
+    border: 1px solid #333;
+    border-radius: 50%;
+    background-color: #333;
+    color: yellow;
 }
 
 .controller {
     position: absolute;
     border-radius: 10px;
     background-color: #666;
+}
+
+.btn {
+    padding: 10px;
+}
+.btn:hover {
+    cursor: pointer;
 }
